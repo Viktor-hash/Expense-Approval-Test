@@ -1,23 +1,11 @@
-// filepath: c:\Interview Tests\Tiplalti\Expense-Approval-Test\approvalService.test.js
-
-const { expect } = require('chai');
-const sinon = require('sinon');
-const ApprovalService = require('../approvalService'); // Adjust the path if necessary
-
-const users = [
-  { uid: 1, email: 'jof@tipalti.com', manager: 2 },
-  { uid: 2, email: 'tom@tipalti.com', manager: 5 },
-  { uid: 3, email: 'nico@tipalti.com', manager: 2 },
-  { uid: 4, email: 'ori@tipalti.com', manager: 5 },
-  { uid: 5, email: 'igor@tipalti.com', manager: 5 },
-  { uid: 6, email: 'sergey@approve.com', manager: 7 },
-  { uid: 7, email: 'reut@approve.com', manager: 7 },
-  { uid: 8, email: 'ben@approve.com', manager: 6 }
-];
+import { expect } from 'chai';
+import sinon from 'sinon';
+import ApprovalService from '../approvalService'; // Adjust the path if necessary
+import { users } from '../users';
 
 describe('ApprovalService', () => {
-  let consoleSpy;
-  let service;
+  let consoleSpy: sinon.SinonSpy<any[], void>;
+  let service: ApprovalService;
 
   beforeEach(() => {
     service = new ApprovalService(users, 1000);
@@ -124,5 +112,4 @@ describe('ApprovalService', () => {
     service.approve('EXP008', 6); // Approve by finance
     expect(() => service.reject('EXP008', 2)).to.throw('Invalid expense'); // Cannot reject an approved expense
   });
-
 });

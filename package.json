@@ -1,10 +1,16 @@
 {
   "devDependencies": {
+    "@types/chai": "^5.2.1",
+    "@types/mocha": "^10.0.10",
+    "@types/sinon": "^17.0.4",
     "chai": "^5.2.0",
     "mocha": "^11.1.0",
-    "sinon": "^20.0.0"
+    "sinon": "^20.0.0",
+    "ts-mocha": "^11.1.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
   },
   "scripts": {
-    "test": "mocha \"test/**/*.test.js\""
+    "test": "ts-mocha \"test/**/*.test.ts\""
   }
 }

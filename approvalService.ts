@@ -1,14 +1,28 @@
-const users = require('./users');
+import { users, User } from './users';
+
+interface Expense {
+  submitter_uid: number;
+  amount: number;
+  approvals: number[];
+  status: 'pending' | 'approved' | 'rejected';
+  flow: (number | number[])[];
+  rejected_by?: number;
+}
 
 class ApprovalService {
-  constructor(users, threshold = 1000) {
+  private users: User[];
+  private userMap: Record<number, User>;
+  private threshold: number;
+  private expenses: Record<string, Expense>;
+
+  constructor(users: User[], threshold: number = 1000) {
     this.users = users;
     this.userMap = Object.fromEntries(users.map(user => [user.uid, user]));
     this.threshold = threshold;
-    this.expenses = {}; // Move expenses inside the class
+    this.expenses = {};
   }
 
-  start_approval(expense_id, submitter_uid, amount) {
+  start_approval(expense_id: string, submitter_uid: number, amount: number): void {
     if (this.expenses[expense_id]) {
       throw new Error('Expense already exists');
     }
@@ -24,12 +38,10 @@ class ApprovalService {
     };
   }
 
-  buildApprovalFlow(submitter_uid, amount) {
-    const flow = [];
-    // if the submitter exists get his manager
+  private buildApprovalFlow(submitter_uid: number, amount: number): (number | number[])[] {
+    const flow: (number | number[])[] = [];
     const boss = this.userMap[submitter_uid]?.manager;
 
-    // if the boss is null, throw an error
     if (!boss) {
       throw new Error('Submitter has no manager');
     }
@@ -45,7 +57,6 @@ class ApprovalService {
       }
     }
 
-    // This could be improved in the future to avoid redundant checks
     const financeApprovers = this.users
       .filter(user => user.email.endsWith('@approve.com'))
       .map(user => user.uid);
@@ -54,7 +65,7 @@ class ApprovalService {
     return flow;
   }
 
-  next_approvers(expense_id) {
+  next_approvers(expense_id: string): number[] {
     const expense = this.expenses[expense_id];
     if (!expense || expense.status !== 'pending') {
       return [];
@@ -66,7 +77,7 @@ class ApprovalService {
     return Array.isArray(nextStep) ? nextStep : [nextStep];
   }
 
-  approve(expense_id, approver_uid) {
+  approve(expense_id: string, approver_uid: number): void {
     const expense = this.expenses[expense_id];
     if (!expense || expense.status !== 'pending') {
       throw new Error('Invalid expense');
@@ -84,7 +95,7 @@ class ApprovalService {
     }
   }
 
-  reject(expense_id, approver_uid) {
+  reject(expense_id: string, approver_uid: number): void {
     const expense = this.expenses[expense_id];
     if (!expense || expense.status !== 'pending') {
       throw new Error('Invalid expense');
@@ -94,7 +105,7 @@ class ApprovalService {
     expense.rejected_by = approver_uid;
   }
 
-  dump_flow(expense_id) {
+  dump_flow(expense_id: string): void {
     const expense = this.expenses[expense_id];
     if (!expense) {
       console.log('No such expense');
@@ -125,7 +136,11 @@ try {
   service.approve('EXP123', service.next_approvers('EXP123')[0]); // Finance approver
   service.dump_flow('EXP123');
 } catch (err) {
-  console.error(err.message);
+  if (err instanceof Error) {
+    console.error(err.message);
+  } else {
+    console.error('An unknown error occurred');
+  }
 }
 
-module.exports = ApprovalService;
+export default ApprovalService;

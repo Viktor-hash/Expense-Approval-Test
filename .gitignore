@@ -22,3 +22,10 @@ coverage/
 
 # Build artifacts
 dist/
+
+# Temporary files
+*.tmp
+*.temp
+
+# TypeScript cache
+*.tsbuildinfo

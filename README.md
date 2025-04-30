@@ -31,12 +31,17 @@ Before running the project, ensure you have the following installed:
     npm install
    ```
 
-3. **Run the Project**: To execute the example usage in approvalService.js, run:
+3. **Compile the TypeScript Code**: Compile the TypeScript files into JavaScript:
    ```bash
-    node approvalService.js
+    npx tsc
    ```
 
-4. **Run Tests**: To run the test suite and validate the functionality, use:
+4. **Run the Project**: To execute the example usage in approvalService.ts, run:
    ```bash
-    npm test
+    node dist/approvalService.js
+   ```
+
+5. **Run Tests**: To run the test suite and validate the functionality, use:
+   ```bash
+    npx ts-mocha "test/**/*.test.ts"
    ```
