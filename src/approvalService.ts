@@ -1,6 +1,6 @@
-import { users, User } from './users';
+import { users, IUser } from './users';
 
-interface Expense {
+interface IExpense {
   submitter_uid: number;
   amount: number;
   approvals: number[];
@@ -10,12 +10,12 @@ interface Expense {
 }
 
 class ApprovalService {
-  private users: User[];
-  private userMap: Record<number, User>;
+  private users: IUser[];
+  private userMap: Record<number, IUser>;
   private threshold: number;
-  private expenses: Record<string, Expense>;
+  private expenses: Record<string, IExpense>;
 
-  constructor(users: User[], threshold: number = 1000) {
+  constructor(users: IUser[], threshold: number = 1000) {
     this.users = users;
     this.userMap = Object.fromEntries(users.map(user => [user.uid, user]));
     this.threshold = threshold;

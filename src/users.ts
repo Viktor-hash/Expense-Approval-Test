@@ -1,10 +1,10 @@
-export interface User {
+export interface IUser {
     uid: number;
     email: string;
     manager: number | null;
   }
   
-  export const users: User[] = [
+  export const users: IUser[] = [
     { uid: 1, email: 'jof@tipalti.com', manager: 2 },
     { uid: 2, email: 'tom@tipalti.com', manager: 5 },
     { uid: 3, email: 'nico@tipalti.com', manager: 2 },
