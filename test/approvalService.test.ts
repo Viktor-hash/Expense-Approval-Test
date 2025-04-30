@@ -1,7 +1,7 @@
 import { expect } from 'chai';
 import sinon from 'sinon';
-import ApprovalService from '../approvalService'; // Adjust the path if necessary
-import { users } from '../users';
+import ApprovalService from '../src/approvalService'; // Adjust the path if necessary
+import { users } from '../src/users';
 
 describe('ApprovalService', () => {
   let consoleSpy: sinon.SinonSpy<any[], void>;
